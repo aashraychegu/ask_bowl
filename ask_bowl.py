@@ -161,6 +161,7 @@ class MainWindow(QMainWindow):
 
     @saying
     def on_start_clicked(self):
+        self.engine.stop()
         self.isanswered, self.isranswered = False, False
         if self.isread != 2:
             self.isread += 1
@@ -302,7 +303,7 @@ class MainWindow(QMainWindow):
         )
         self.istup = not self.istup
         self.isanswered = True
-        self.engine.resume()
+        self.engine.stop()
         self.on_answer_clicked()
 
     def checkMC(self, item):
