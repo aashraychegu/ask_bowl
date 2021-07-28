@@ -21,6 +21,7 @@ try:
 except:
     pass
 
+
 class action_bar(QWidget):
     def __init__(self):
         super().__init__()
@@ -28,7 +29,7 @@ class action_bar(QWidget):
         h = 30
         v = 35
         self.startbtn = QPushButton("&Start")
-        self.nextbtn = QPushButton("&Next")
+        self.nextbtn = QPushButton("&Next Question")
         self.pausebtn = QPushButton("Pause (Spacebar)")
         self.playbtn = QPushButton("Play (Spacebar)")
         self.stopbtn = QPushButton("S&top")
