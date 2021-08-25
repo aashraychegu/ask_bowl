@@ -4,22 +4,11 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 import PySide6
 import sys
+
 try:
     from PySide6.QtTextToSpeech import QTextToSpeech
-except:
-    pass
-try:
-    from PyQt6.QtTextToSpeech import QTextToSpeech
-except:
-    pass
-try:
-    from PyQt5.QtTextToSpeech import QTextToSpeech
-except:
-    pass
-try:
+except ImportError:
     from PySide2.QtTextToSpeech import QTextToSpeech
-except:
-    pass
 
 
 class action_bar(QWidget):
@@ -69,7 +58,7 @@ class action_bar(QWidget):
         layout.addWidget(self.voiceCombo)
         layout.addWidget(QLabel("<h6>Volume:"))
         layout.addWidget(self.voiceVolume)
-        layout.addWidget(QLabel("<h6>Rate:"))
+        layout.addWidget(QLabel("<h6>Rate\Speed:"))
         layout.addWidget(self.voiceRate)
         layout.addWidget(QLabel("<h6>Pitch:"))
         layout.addWidget(self.voicePitch)
@@ -105,6 +94,7 @@ class show_area(QWidget):
     def __init__(self):
         super().__init__()
         layout = QVBoxLayout()
+        self.istossup = QLabel("<b><h2>Current Question: Tossup")
         self.Tquestion_text = QLabel()
         self.Tquestion_text.setWordWrap(True)
         self.Tanswer_text = QLabel()
@@ -114,6 +104,7 @@ class show_area(QWidget):
         self.Bquestion_text.setStyleSheet("margin-top: 10%")
         self.Banswer_text = QLabel()
         self.Banswer_text.setWordWrap(True)
+        layout.addWidget(self.istossup)
         layout.addWidget(QLabel("<h3>Tossup Question:"))
         layout.addWidget(self.Tquestion_text)
         layout.addWidget(QLabel("<h3>Tossup Answer:"))
@@ -138,9 +129,10 @@ class answerbox(QWidget):
         self.layout = QVBoxLayout()
         self.cnum = 0
         self.wnum = 0
-        self.cwtext = QLabel(
-            "<h2>Correct: " + str(self.cnum) + " Incorrect: " + str(self.wnum)
-        )
+        # self.timer = QLabel("<h1> -:-/-:-")
+        # self.layout.addWidget(self.timer)
+        self.cwtext = QLabel("<h2>Correct: " + str(self.cnum) +
+                             " Incorrect: " + str(self.wnum))
         self.cwtext.setWordWrap(True)
         self.layout.addWidget(self.cwtext)
         ins = QLabel(

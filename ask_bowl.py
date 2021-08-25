@@ -6,7 +6,7 @@ try:
     # ..or..
     import ctypes
 
-    myappid = "com.SomeStudio.Ask_Bowl.Desktop.10"
+    myappid = "com.SomeStudio.Ask_Bowl.Desktop.21"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except ImportError:
     pass
@@ -22,7 +22,6 @@ class MainWindow(QMainWindow):
 
         # setting the minimum size
         self.setMinimumSize(width, height)
-
         self.istup = True
         self.isanswered, self.isranswered = False, False
         self.isread = 0
@@ -79,7 +78,6 @@ class MainWindow(QMainWindow):
         self.engine.stateChanged.connect(self.stateChanged)
         self.voices = []
         vlist = self.engine.availableVoices()
-        # print(vlist, type(vlist), len(vlist))
         for voice in vlist:
             self.voices.append(voice)
             self.actions.voiceCombo.addItem(voice.name())
@@ -115,14 +113,16 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event: PySide6.QtGui.QKeyEvent) -> None:
         try:
-            # print(chr(event.key()))
             (self.amap[chr(event.key()).lower()]())
         except:
             ...
         return super().keyPressEvent(event)
 
-    def play(self): self.engine.resume()
-    def pause(self): self.engine.pause()
+    def play(self):
+        self.engine.resume()
+
+    def pause(self):
+        self.engine.pause()
 
     def c(self):
         if self.isranswered or self.isanswered == False:
@@ -130,12 +130,10 @@ class MainWindow(QMainWindow):
 
         self.answerpane.wnum -= 1
         self.answerpane.cnum += 1
-        self.answerpane.cwtext.setText(
-            "<h2>Correct: "
-            + str(self.answerpane.cnum)
-            + " Incorrect: "
-            + str(self.answerpane.wnum)
-        )
+        self.answerpane.cwtext.setText("<h2>Correct: " +
+                                       str(self.answerpane.cnum) +
+                                       " Incorrect: " +
+                                       str(self.answerpane.wnum))
         self.isranswered = True
 
     def w(self):
@@ -144,12 +142,10 @@ class MainWindow(QMainWindow):
 
         self.answerpane.wnum -= -1
         self.answerpane.cnum += -1
-        self.answerpane.cwtext.setText(
-            "<h2>Correct: "
-            + str(self.answerpane.cnum)
-            + " Incorrect: "
-            + str(self.answerpane.wnum)
-        )
+        self.answerpane.cwtext.setText("<h2>Correct: " +
+                                       str(self.answerpane.cnum) +
+                                       " Incorrect: " +
+                                       str(self.answerpane.wnum))
         self.isranswered = True
 
     def saying(func):
@@ -178,6 +174,7 @@ class MainWindow(QMainWindow):
         self.isread %= 3
 
     def on_next_clicked(self):
+        self.engine.stop()
         self.isanswered, self.isranswered = False, False
         self.isread += 1
         self.isread %= 3
@@ -191,8 +188,9 @@ class MainWindow(QMainWindow):
 
     def get_question(self):
         self.curr_question = make_new_question()
-        _title = "ask_bowl: Question ID " + str(self.curr_question.link).replace(
-            "https://scibowldb.com/tossup/", "")
+        _title = "ask_bowl: Question ID " + str(
+            self.curr_question.link).replace("https://scibowldb.com/tossup/",
+                                             "")
         self.setWindowTitle(_title)
         self.answerpane.abox.setText("")
 
@@ -211,21 +209,18 @@ class MainWindow(QMainWindow):
         self.text.Tanswer_text.setVisible(False)
         self.text.Bquestion_text.setVisible(False)
         self.text.Banswer_text.setVisible(False)
-        _title = "ask_bowl: Question ID " + str(self.curr_question.link).replace(
-            "https://scibowldb.com/tossup/", "")
+        _title = "ask_bowl: Question ID " + str(
+            self.curr_question.link).replace("https://scibowldb.com/tossup/",
+                                             "")
         self.setWindowTitle(_title)
 
-    def set_all_visibility(
-        self,
-    ):
+    def set_all_visibility(self, ):
         self.text.Tquestion_text.setVisible(True)
         self.text.Tanswer_text.setVisible(True)
         self.text.Bquestion_text.setVisible(True)
         self.text.Banswer_text.setVisible(True)
 
-    def set_question_visibility(
-        self,
-    ):
+    def set_question_visibility(self, ):
 
         # self.istup = not self.istup
         if self.isread == 1:
@@ -234,9 +229,7 @@ class MainWindow(QMainWindow):
             self.text.Bquestion_text.setVisible(True)
         # self.istup = not self.istup
 
-    def set_answer_visibility(
-        self,
-    ):
+    def set_answer_visibility(self, ):
         # self.istup = not self.istup
         if self.isread == 1:
             self.text.Tanswer_text.setVisible(True)
@@ -244,7 +237,7 @@ class MainWindow(QMainWindow):
             self.text.Banswer_text.setVisible(True)
         # self.istup = not self.istup
 
-    @ saying
+    @saying
     def repeat(self, elements="ALL"):
         if self.isread == 1:
             self.istup = not self.istup
@@ -254,7 +247,7 @@ class MainWindow(QMainWindow):
         if state == QTextToSpeech.State.Ready:
             self.actions.setvalidity(True)
 
-    @ saying
+    @saying
     def on_answer_clicked(self):
         if self.isread > 0:
             self.istup = not self.istup
@@ -266,7 +259,7 @@ class MainWindow(QMainWindow):
         if self.isread > 0:
             self.istup = not self.istup
 
-    @ saying
+    @saying
     def on_question_clicked(self):
         self.set_engine_properties()
         self.istup = not self.istup
@@ -295,16 +288,18 @@ class MainWindow(QMainWindow):
             if self.checkSA(item) == 0:
                 self.engine.resume()
 
-        self.answerpane.cwtext.setText(
-            "<h2>Correct: "
-            + str(self.answerpane.cnum)
-            + " Incorrect: "
-            + str(self.answerpane.wnum)
-        )
+        self.answerpane.cwtext.setText("<h2>Correct: " +
+                                       str(self.answerpane.cnum) +
+                                       " Incorrect: " +
+                                       str(self.answerpane.wnum))
         self.istup = not self.istup
         self.isanswered = True
         self.engine.stop()
         self.on_answer_clicked()
+        if self.istup:
+            self.text.istossup.setText("<b><h2>Current Question: Tossup")
+        else:
+            self.text.istossup.setText("<b><h2>Current Question: Bonus")
 
     def checkMC(self, item):
         if self.answerpane.abox.text().lower() == item.ans[0].lower():
@@ -318,19 +313,14 @@ class MainWindow(QMainWindow):
             return 0
 
     def checkSA(self, item):
-        if (
-            QMessageBox.question(
+        if (QMessageBox.question(
                 self,
                 "Is your Answer Correct?",
-                "Are these two the same: "
-                + item.ans
-                + " and: "
-                + self.answerpane.abox.text(),
+                "Are these two the same: " + item.ans + " and: " +
+                self.answerpane.abox.text(),
                 QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
                 QMessageBox.Yes,
-            )
-            == QMessageBox.Yes
-        ):
+        ) == QMessageBox.Yes):
             self.answerpane.cnum += 1
             self.engine.resume()
             self.engine.stop()
@@ -352,12 +342,14 @@ class MainWindow(QMainWindow):
 
 
 app = QApplication(sys.argv)
-splash_pix = QPixmap('book_education_growth_biology_science_icon_124783.png')
+splash_pix = QPixmap(
+    "resources/book_education_growth_biology_science_icon_124783.png")
 splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
 splash.setMask(splash_pix.mask())
 splash.show()
+QLabel("loading latest questions").show()
 app.processEvents()
-app.setWindowIcon(QtGui.QIcon("icon.ico"))
+app.setWindowIcon(QtGui.QIcon("resources/icon.ico"))
 w = MainWindow()
 w.show()
 splash.finish(w)
