@@ -132,7 +132,7 @@ class MainWindow(QMainWindow):
         self.answerpane.cnum += 1
         self.answerpane.cwtext.setText("<h2>Correct: " +
                                        str(self.answerpane.cnum) +
-                                       " Incorrect: " +
+                                       "<br> Incorrect: " +
                                        str(self.answerpane.wnum))
         self.isranswered = True
 
@@ -302,15 +302,18 @@ class MainWindow(QMainWindow):
             self.text.istossup.setText("<b><h2>Current Question: Bonus")
 
     def checkMC(self, item):
-        if self.answerpane.abox.text().lower() == item.ans[0].lower():
-            self.answerpane.cnum += 1
-            self.engine.resume()
-            self.engine.stop()
-            self.answerpane.abox.setText("")
-            return 1
+        if len(self.answerpane.abox.text()) > 1 or self.answerpane.abox.text().lower() not in ["w", "x", "y", "z"]:
+            self.checkSA()
         else:
-            self.answerpane.wnum += 1
-            return 0
+            if self.answerpane.abox.text().lower() == item.ans[0].lower():
+                self.answerpane.cnum += 1
+                self.engine.resume()
+                self.engine.stop()
+                self.answerpane.abox.setText("")
+                return 1
+            else:
+                self.answerpane.wnum += 1
+                return 0
 
     def checkSA(self, item):
         if (QMessageBox.question(

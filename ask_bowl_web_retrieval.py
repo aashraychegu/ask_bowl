@@ -84,9 +84,10 @@ def make_str_question(strquestion):
 
 def load_file():
     try:
+        x = open("dbs/main.json", "r+")
         json.dump(
             json.loads(requests.get("https://scibowldb.com/api/questions").text),
-            (x := open("dbs/main.json", "r+")),
+            (x),
         )
         x.close()
     except:
@@ -94,7 +95,8 @@ def load_file():
 
 
 def read_file_into_memory():
-    obj = json.load((x := open("dbs/main.json")))["questions"]
+    x = open("dbs/main.json")
+    obj = json.load((x))["questions"]
     x.close()
     return obj, type(obj), getsizeof(obj)
 
