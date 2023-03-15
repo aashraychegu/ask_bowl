@@ -1,5 +1,5 @@
 # ask_bowl has a new home!!
-[Click Here to go to the new ask_bowl](askbowl.anvil.app)
+[Click Here to go to the new ask_bowl](https://askbowl.anvil.app)
 
 ### If you are still using the old version, here are some setup instructions
 If there are any problems with packages:
